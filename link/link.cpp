@@ -233,21 +233,23 @@ void del()
 int main()
 {
 	setlocale(LC_ALL, "chs");
+
 	TCHAR srcPath[MAX_PATH] = { 0 };
 	GetModuleFileName(NULL, srcPath, MAX_PATH);
 
+	TCHAR szStartPath[MAX_PATH] = { 0 };
+	SHGetSpecialFolderPath(NULL, szStartPath, CSIDL_DESKTOP, 0);
+	_tcscat_s(szStartPath, _T("\\决战魔域H5.lnk"));
+
 	// 先创建桌面快捷方式
-	TCHAR szLinkFilePath[MAX_PATH] = L"C:\\Documents and Settings\\All Users\\桌面\\决战魔域H5.lnk";
-	TCHAR szThisFilePath[MAX_PATH] = L"http://game.jzyx.com/jzmy";
 	CoInitialize(NULL);
 
-
-	CreateLink(srcPath, szLinkFilePath);
+	CreateLink(srcPath, szStartPath);
 	CoUninitialize();
 
 	// 绑定程序快捷方式到任务栏
-	PinToTaskBar(_T("C:\\Documents and Settings\\All Users\\桌面\\决战魔域H5.lnk"), _T("C:\\Documents and Settings\\All Users\\")
-		, _T("极致游戏，决战魔域H5"), _T("决战魔域H5"), szLinkFilePath, 0);
+	PinToTaskBar(szStartPath, _T("C:\\Documents and Settings\\All Users\\")
+		, _T("极致游戏，决战魔域H5"), _T("决战魔域H5"), szStartPath, 0);
 
 	// 打开网站
 	ShellExecute(NULL, _T("open"), _T("http://game.jzyx.com/jzmy"), NULL, NULL, SW_SHOWNORMAL);
